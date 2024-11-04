@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Components.Web
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
 @using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.Extensions.Options
 @using Microsoft.JSInterop
 @using BlogWebSite.Client
 @using Masa.Blazor
@@ -25,6 +26,7 @@
 @inject MasaBlazor MasaBlazor
 @inject NavigationManager NavigationManager
 @inject LocalStorage MasaLS
+@inject SiteInfo SiteInfo
 
 @inject IPopupService Popup
 @inject BlogWebSite.Shared.RenderModes.IRenderMode IRenderMode

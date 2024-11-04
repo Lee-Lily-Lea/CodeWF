@@ -3,16 +3,18 @@ using BlogWebSite.Components;
 using BlogWebSite.Shared;
 using BlogWebSite.Shared.RenderModes;
 
+using Microsoft.Extensions.Options;
+
 namespace BlogWebSite
 {
     public class Program
     {
-        public const bool UseWasm = false;
+        public const bool UseWasm = true;
 
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            OldIOC(builder);
+            AddIOC(builder);
 
             // Add services to the container.
             var razorServer = builder.Services.AddRazorComponents();
@@ -41,20 +43,26 @@ namespace BlogWebSite
             app.UseAntiforgery();
 
             var razorApp = app.MapRazorComponents<App>();
-            razorApp.AddInteractiveServerRenderMode().AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
+            razorApp
+                .AddInteractiveServerRenderMode()
+                .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
             if (UseWasm)
             {
                 razorApp.AddInteractiveWebAssemblyRenderMode();
             }
 
+            app.MapControllers();
             app.Run();
         }
 
-        static void OldIOC(WebApplicationBuilder builder)
+        static void AddIOC(WebApplicationBuilder builder)
         {
-            builder.Services.Configure<SiteOption>(builder.Configuration.GetSection("Site"));
-            //builder.Services.AddSingleton<AppService>();
-            //builder.AddApp();
+            var services = builder.Services;
+
+            services.AddControllers().AddNewtonsoftJson();
+
+            services.Configure<SiteInfo>(builder.Configuration.GetSection(nameof(SiteInfo)));
+            services.AddScoped(sp => sp.GetService<IOptions<SiteInfo>>()!.Value);
         }
     }
 }

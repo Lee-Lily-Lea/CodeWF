@@ -1,44 +1,42 @@
 using BlogWebSite.Shared.RenderModes;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-
+using Microsoft.Extensions.DependencyInjection;
 
 const bool isAutoProject = true;
 
-if (isAutoProject)
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+if (isAutoProject is false)
 {
-    var builder = WebAssemblyHostBuilder.CreateDefault(args);
-
-    builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
-    builder.Services.AddMasaBlazorLocal();
-    builder.Services.AddSingleton<IRenderMode, WasmRenderMode>();
-
-    var siteopt = await GetOptions(builder.HostEnvironment.BaseAddress);
-    builder.Services.AddSingleton(siteopt);
-
-    var app = builder.Build();
-    await app.RunAsync();
-}
-else
-{
-    var builder = WebAssemblyHostBuilder.CreateDefault(args);
     builder.RootComponents.Add<Routes>("#app");
     builder.RootComponents.Add<HeadOutlet>("head::after");
+}
+else { }
 
-    builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+await AddIOC(builder);
 
+builder.Services.AddScoped(sp => new HttpClient
+{
+    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress),
+});
 
-    builder.Services.AddMasaBlazorLocal();
-    builder.Services.AddSingleton<IRenderMode, WasmRenderMode>();
+builder.Services.AddMasaBlazorLocal();
+builder.Services.AddSingleton<IRenderMode, WasmRenderMode>();
+var app = builder.Build();
+await app.RunAsync();
 
-    await builder.Build().RunAsync();
+static async Task AddIOC(WebAssemblyHostBuilder builder)
+{
+    var services = builder.Services;
+    var baseUrl = builder.HostEnvironment.BaseAddress;
+
+    var siteInfo = await GetOptions<SiteInfo>(baseUrl + "api/Site/GetSiteInfo");
+    services.AddSingleton(siteInfo ?? new());
 }
 
-
-async Task<SiteOption> GetOptions(string url)
+static async Task<T?> GetOptions<T>(string url)
 {
-    using (var httpclient = new HttpClient() { BaseAddress = new Uri(url) })
-    {
-        return await httpclient.GetFromJsonAsync<SiteOption>("files/json/SiteOption.json");
-    };
+    using var httpclient = new HttpClient();
+    var t = await httpclient.GetFromJsonAsync<T>(url);
+    return t;
 }

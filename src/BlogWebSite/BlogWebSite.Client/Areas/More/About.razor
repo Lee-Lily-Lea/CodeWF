@@ -1,11 +1,8 @@
 ﻿@page "/more/about"
-@* 
-@inject IOptions SiteOption SiteOption
 
+<PageTitle>关于 - @SiteInfo.AppTitle</PageTitle>
 
-<PageTitle>关于 - @SiteOption.AppTitle</PageTitle>
-
-@code{
+@code {
     bool IsWasm;
     bool IsServer;
     protected override void OnAfterRender(bool firstRender)
@@ -13,25 +10,54 @@
         base.OnAfterRender(firstRender);
         if (firstRender)
         {
-            Console.WriteLine("render: " + SiteOption.AppTitle);
-
             IsWasm = IRenderMode.IsWasm();
             IsServer = IRenderMode.IsWasm() is false;
 
-            StateHasChanged();
+            InvokeAsync(StateHasChanged);
         }
     }
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Console.WriteLine("init: " + SiteOption.AppTitle);
     }
+
+    async Task OnClick()
+    {
+        await Task.Delay(100);
+        StateHasChanged();
+    }
+
+
+    // string GetInfos()
+    // {
+    //     System.Text.Json.JsonSerializerOptions options = new()
+    //         {
+    //             Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+    //             WriteIndented = true
+    //         };
+    //     var type = SiteInfo.GetType();
+    //     var props = type.GetProperties();
+    //     System.Text.StringBuilder sb = new System.Text.StringBuilder();
+    //     sb.AppendLine("```json");
+    //     sb.AppendJoin(System.Environment.NewLine, props.Select(x => new { x.Name, Value = x.GetValue(SiteInfo) }).Select(x => System.Text.Json.JsonSerializer.Serialize(x, options)));
+    //     sb.AppendLine();
+    //     sb.AppendLi ne("```");
+    //     var ret = sb.ToString();
+    //     return ret;
+    // }
 }
 
 
-<MCard Title="@IsServer.ToString()" Subtitle="@nameof(IsServer)" Text="@SiteOption.AppTitle" />
-<MCard Title="@IsWasm.ToString()" Subtitle="@nameof(IsWasm)" Text="@SiteOption.AppTitle" />
- *@
+<MCard Title="@IsServer.ToString()" Subtitle="@nameof(IsServer)" Text="@SiteInfo.AppTitle" />
+<MCard Title="@IsWasm.ToString()" Subtitle="@nameof(IsWasm)" Text="@SiteInfo.AppTitle" />
+
+<MButton OnClick="OnClick">aaa</MButton>
+
+@* <MMarkdownIt Html="true" Source="@GetInfos()"/> *@
+
+
+
+
 @* @inherits BaseComponent
 @inject AppService AppService
 
