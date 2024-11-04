@@ -1,10 +1,40 @@
 ﻿@page "/more/about"
+@* 
+@inject IOptions SiteOption SiteOption
 
+
+<PageTitle>关于 - @SiteOption.AppTitle</PageTitle>
+
+@code{
+    bool IsWasm;
+    bool IsServer;
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        if (firstRender)
+        {
+            Console.WriteLine("render: " + SiteOption.AppTitle);
+
+            IsWasm = IRenderMode.IsWasm();
+            IsServer = IRenderMode.IsWasm() is false;
+
+            StateHasChanged();
+        }
+    }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Console.WriteLine("init: " + SiteOption.AppTitle);
+    }
+}
+
+
+<MCard Title="@IsServer.ToString()" Subtitle="@nameof(IsServer)" Text="@SiteOption.AppTitle" />
+<MCard Title="@IsWasm.ToString()" Subtitle="@nameof(IsWasm)" Text="@SiteOption.AppTitle" />
+ *@
 @* @inherits BaseComponent
 @inject AppService AppService
-@inject IOptions<SiteOption> SiteOption *@
 
-@* <PageTitle>关于 - @SiteOption.Value.AppTitle</PageTitle>
 
 <div class="container cl-container cl-post">
     <div>

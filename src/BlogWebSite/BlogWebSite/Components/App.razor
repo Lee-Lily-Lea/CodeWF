@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="BlogWebSite.styles.css" />
     <link href="css/materialdesign/v7.1.96/css/materialdesignicons.min.css" rel="stylesheet">
-    <HeadOutlet @rendermode=InteractiveAuto />
+    <HeadOutlet @rendermode=rendermode />
     <MAppThemeStylesheet />
 </head>
 
 <body>
-    <Routes @rendermode=InteractiveAuto />
+    <Routes @rendermode=rendermode />
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/Masa.Blazor/js/masa-blazor.js"></script>
 </body>
@@ -22,6 +22,8 @@
 </html>
 
 @code {
+    readonly IComponentRenderMode rendermode = Program.UseWasm ? InteractiveAuto : InteractiveServer;
+
     // [Inject]
     // Client.RenderModes.IRenderMode IRenderMode { get; set; }
     // [Inject]

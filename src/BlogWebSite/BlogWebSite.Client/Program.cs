@@ -1,5 +1,4 @@
 using BlogWebSite.Shared.RenderModes;
-
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 
@@ -13,6 +12,10 @@ if (isAutoProject)
 
     builder.Services.AddMasaBlazorLocal();
     builder.Services.AddSingleton<IRenderMode, WasmRenderMode>();
+
+    var siteopt = await GetOptions(builder.HostEnvironment.BaseAddress);
+    builder.Services.AddSingleton(siteopt);
+
     var app = builder.Build();
     await app.RunAsync();
 }
@@ -29,4 +32,13 @@ else
     builder.Services.AddSingleton<IRenderMode, WasmRenderMode>();
 
     await builder.Build().RunAsync();
+}
+
+
+async Task<SiteOption> GetOptions(string url)
+{
+    using (var httpclient = new HttpClient() { BaseAddress = new Uri(url) })
+    {
+        return await httpclient.GetFromJsonAsync<SiteOption>("files/json/SiteOption.json");
+    };
 }

@@ -15,7 +15,8 @@ public partial class NavTabs
             [
                 new("赞助", "/more/Donation"),
                 new("博客园", "https://www.cnblogs.com/Dotnet9-com", true),
-                new("B站", "https://space.bilibili.com/470546606", true)
+                new("B站", "https://space.bilibili.com/470546606", true),
+                new("关于", "/more/about"),
             ]
         );
 

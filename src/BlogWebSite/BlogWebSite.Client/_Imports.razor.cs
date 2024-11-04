@@ -2,6 +2,7 @@
 global using System.Net.Http.Json;
 
 global using BlogWebSite.Client;
+global using BlogWebSite.Shared;
 
 global using Masa.Blazor;
 global using Masa.Blazor.Presets;

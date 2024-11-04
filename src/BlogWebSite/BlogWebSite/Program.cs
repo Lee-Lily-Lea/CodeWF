@@ -1,17 +1,26 @@
 using BlogWebSite.Client;
 using BlogWebSite.Components;
+using BlogWebSite.Shared;
 using BlogWebSite.Shared.RenderModes;
 
 namespace BlogWebSite
 {
     public class Program
     {
+        public const bool UseWasm = false;
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            OldIOC(builder);
 
             // Add services to the container.
-            builder.Services.AddRazorComponents().AddInteractiveServerComponents().AddInteractiveWebAssemblyComponents();
+            var razorServer = builder.Services.AddRazorComponents();
+            razorServer.AddInteractiveServerComponents();
+            if (UseWasm)
+            {
+                razorServer.AddInteractiveWebAssemblyComponents();
+            }
 
             builder.Services.AddMasaBlazorLocal();
             builder.Services.AddScoped<IRenderMode, ServerRenderMode>();
@@ -31,12 +40,21 @@ namespace BlogWebSite
             app.UseStaticFiles();
             app.UseAntiforgery();
 
-            app.MapRazorComponents<App>()
-                .AddInteractiveServerRenderMode()
-                .AddInteractiveWebAssemblyRenderMode()
-                .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
+            var razorApp = app.MapRazorComponents<App>();
+            razorApp.AddInteractiveServerRenderMode().AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
+            if (UseWasm)
+            {
+                razorApp.AddInteractiveWebAssemblyRenderMode();
+            }
 
             app.Run();
+        }
+
+        static void OldIOC(WebApplicationBuilder builder)
+        {
+            builder.Services.Configure<SiteOption>(builder.Configuration.GetSection("Site"));
+            //builder.Services.AddSingleton<AppService>();
+            //builder.AddApp();
         }
     }
 }
