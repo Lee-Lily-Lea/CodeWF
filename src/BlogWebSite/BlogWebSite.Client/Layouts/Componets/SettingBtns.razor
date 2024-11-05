@@ -1,0 +1,12 @@
+
+<div class="d-flex flex-column flex-md-row " style="align-items:center">
+    <MChip Color="@Color()">@IRenderMode.CurRenderModeName</MChip>
+    <ThemeSwitch Zoom="0.6" />
+</div>
+
+@code {
+    [Parameter]
+    public bool Vertical { get; set; }
+
+    string Color() => ((IRenderMode.IsWasm() ? MDS.Primary : MDS.Success)).Style();
+}

@@ -1,20 +1,25 @@
 using BlogWebSite.Client;
 using BlogWebSite.Components;
+using BlogWebSite.Services;
+using BlogWebSite.Services.Configure;
 using BlogWebSite.Shared;
 using BlogWebSite.Shared.RenderModes;
 
+using Masa.Blazor;
+
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 
 namespace BlogWebSite
 {
     public class Program
     {
-        public const bool UseWasm = true;
+        public const bool UseWasm = false;
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            AddIOC(builder);
 
             // Add services to the container.
             var razorServer = builder.Services.AddRazorComponents();
@@ -27,12 +32,17 @@ namespace BlogWebSite
             builder.Services.AddMasaBlazorLocal();
             builder.Services.AddScoped<IRenderMode, ServerRenderMode>();
 
+
+            await AddIOC(builder);
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseWebAssemblyDebugging();
+                app.UseSwagger();
+                app.UseSwaggerUI(opt => opt.RoutePrefix = "Swagger");
             }
             else
             {
@@ -55,14 +65,31 @@ namespace BlogWebSite
             app.Run();
         }
 
-        static void AddIOC(WebApplicationBuilder builder)
+        static async Task AddIOC(WebApplicationBuilder builder)
         {
             var services = builder.Services;
 
             services.AddControllers().AddNewtonsoftJson();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
 
-            services.Configure<SiteInfo>(builder.Configuration.GetSection(nameof(SiteInfo)));
+            var infoConfig = builder.Configuration.GetSection(nameof(SiteInfo));
+            services.Configure<SiteInfo>(infoConfig);
+
             services.AddScoped(sp => sp.GetService<IOptions<SiteInfo>>()!.Value);
+
+            var opt = infoConfig.Get<SiteOption>();
+            services.AddSingleton<SiteOption>(opt);
+
+            var appService = new AppService(opt);
+            await appService.SeedAsync();
+            services.AddSingleton<AppService>(appService);
+            services.AddSingleton<IAppService>(appService);
+
         }
+
+
     }
 }

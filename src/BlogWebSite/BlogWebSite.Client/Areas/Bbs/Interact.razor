@@ -1,68 +1,161 @@
 ﻿@page "/bbs"
 @page "/bbs/cat/{category}"
+@layout Layouts.BlogsLayout
+@inject IAppService IAppService
 
-@* @inherits ListComponent<BlogPost>
-@inject IOptions<SiteOption> SiteOptions
-@inject AppService AppService 
+<PageTitle>博文 - @SiteInfo.AppTitle</PageTitle>
 
-<PageTitle>问题交流 - @SiteOptions.Value.AppTitle</PageTitle>
+<style>
+    main.m-main {
+        overflow-y: hidden;
+    }
+</style>
+<MRow Id="teststst" Style="height:calc(100vh - 100px)">
+    <MCol Cols="3">
+        <MCard Title="SSSS" OnClick="OnC"/>
+    </MCol>
+    <MCol Cols="6" Id="infinite-scroll-usage" Style="max-height:100%;overflow-y:auto">
+        <MList ThreeLine="true">
+            <MSubheader>博文列表</MSubheader>
+            <MDivider />
 
-<UMenuBar Target="cl-bbs-menu"/>
-<div class="container cl-container cl-bbs">
-    <UCategory/>
-    <CmsCard Class="cl-posts">
-        <HeadTemplate>
-            <CmsTitle Icon="far fa-server" Title="内容列表"/>
-            <AntForm Id="query">
-                <AntSearch Id="Key" Placeholder="请输入关键字搜索" Value="@Key"/>
-            </AntForm>
-        </HeadTemplate>
-        <ChildContent>
-            @if (!(_blogPosts?.Total > 0))
+            @foreach (var item in _blogPosts.Data)
             {
-                <AntEmpty/>
+                <MListItem Inactive="true" Title="@item.Title" Subtitle="@(item.Description+item.Description+item.Description+item.Description+item.Description)" Href="@ConstantUtil.GetBbsPostUrl(item)" Ripple="true">
+                    <MListItemAvatar Tile="true">
+                        <MImage Src="@item.Cover"></MImage>
+                    </MListItemAvatar>
+                </MListItem>
+                <MDivider />
             }
-            else
-            {
-                foreach (var post in _blogPosts.Data)
-                {
-                    <UPostItem Post="post"/>
-                }
+        </MList>
 
-                <div style="padding:15px 0;text-align:center;">
-                    <AntPagination TotalCount="@_blogPosts.Total" PageSize="ConstData.PageSize" PageIndex="@Page" Key="@Key"/>
-                </div>
-            }
-        </ChildContent>
-    </CmsCard>
-    <div>
-        <UWebSiteCount/>
-        <div style="height:20px;"></div>
-        <UPostRank/>
-    </div>
-</div> 
+        <MInfiniteScroll OnLoad="@OnLoad"
+                         Manual
+                         Parent="#infinite-scroll-manual">
+        </MInfiniteScroll>
+    </MCol>
+    <MCol Cols="3">
+        <button onclick="Lo()">aaa</button>
+    </MCol>
+</MRow>
+
+
+
+<MSimpleTable Class="d-none">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Lastmod</th>
+            <th>Copyright</th>
+            <th>Banner</th>
+            <th>Author</th>
+            <th>LastModifyUser</th>
+            <th>OriginalTitle</th>
+            <th>OriginalLink</th>
+            <th>Draft</th>
+            <th>Cover</th>
+            <th>Albums</th>
+            <th>Categories</th>
+            <th>Tags</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < _blogPosts?.Data.Count; i++)
+        {
+            var d = _blogPosts.Data[i];
+            <tr>
+                <td>@d.Title</td>
+                <td>@d.Slug</td>
+                <td>@d.Description</td>
+                <td>@d.Date</td>
+                <td>@d.Lastmod</td>
+                <td>@d.Copyright</td>
+                <td>@d.Banner</td>
+                <td>@d.Author</td>
+                <td>@d.LastModifyUser</td>
+                <td>@d.OriginalTitle</td>
+                <td>@d.OriginalLink</td>
+                <td>@d.Draft</td>
+                <td>@d.Cover</td>
+                <td>@d.Albums</td>
+                <td>@d.Categories</td>
+                <td>@d.Tags</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2">
+                Total: @_blogPosts?.Total
+            </td>
+        </tr>
+    </tfoot>
+</MSimpleTable>
 
 @code {
-    private PageData<BlogPost>? _blogPosts;
+
+    private async Task OnLoad(InfiniteScrollLoadEventArgs args)
+    {
+        var append = await IAppService.GetPostByCategory(_blogPosts.PageIndex + 1, _blogPosts.PageSize, Category, null);
+
+        args.Status = append.Data.Count == 0 ? InfiniteScrollLoadStatus.Empty : InfiniteScrollLoadStatus.Ok;
+
+        var cur = _blogPosts.Data;
+        cur.AddRange(append.Data);
+
+        _blogPosts = new(_blogPosts.PageIndex + 1, _blogPosts.PageSize, append.Total, cur);
+    }
+
+    void OnC()
+    {
+        double d = 6;
+    }
+    private PageData<BlogPost> _blogPosts = new(1, 10, 0, []);
 
     [Parameter] public string Category { get; set; }
-    [SupplyParameterFromQuery] public string? Key { get; set; }
+    // [SupplyParameterFromQuery] public string? Key { get; set; }
 
-    protected override async Task OnInitAsync()
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     await base.OnAfterRenderAsync(firstRender);
+
+    //     if (firstRender)
+    //     {
+    //         if (string.IsNullOrWhiteSpace(Category))
+    //         {
+    //             Category = "dotnet";
+    //         }
+
+    //         _blogPosts = await IAppService.GetPostByCategory(1, 10, Category, null);
+    //         StateHasChanged();
+    //     }
+    // }
+
+    protected override void OnAfterRender(bool firstRender)
     {
-        await base.OnInitAsync();
+        base.OnAfterRender(firstRender);
+        if (firstRender)
+        {
+            var lshe = MasaBlazor.Application.Top;
+
+            max = $"max-height:calc( 100vh - {lshe}px)";
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
         if (string.IsNullOrWhiteSpace(Category))
         {
             Category = "dotnet";
         }
 
-        if (string.IsNullOrWhiteSpace(Key))
-        {
-            Key = Context.Request.Get<string>("Key");
-        }
-
-        _blogPosts = await AppService.GetPostByCategory(Page, ConstData.PageSize, Category, Key);
+        _blogPosts = await IAppService.GetPostByCategory(_blogPosts.PageIndex, _blogPosts.PageSize, Category, null);
     }
-
+    string max = string.Empty;
 }
-*@
