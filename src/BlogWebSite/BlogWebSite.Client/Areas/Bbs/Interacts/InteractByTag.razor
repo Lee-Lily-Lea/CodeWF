@@ -1,0 +1,15 @@
+﻿@page "/bbs/bytag"
+
+@layout Layouts.BlogsLayout
+@inject IAppService IAppService
+
+@using BlogWebSite.Client.Areas.Bbs.Interacts.Componets;
+
+<PageTitle>@InteractContent.Title - @SiteInfo.AppTitle</PageTitle>
+
+
+<InteractContent BlogPosts="blogs"
+                 HlTag="@HlTag"
+                 PageIndex="pageIndex" PageSize="pageSize" PageLength="pageLength"
+                 PageIndexChanged="OnPageIndexChanged"
+                 TagChanged="OnTagChanged" />

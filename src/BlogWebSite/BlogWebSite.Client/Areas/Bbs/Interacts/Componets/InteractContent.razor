@@ -1,0 +1,52 @@
+﻿@code {
+    void TTT()
+    {
+        Console.WriteLine(nameof(PageIndex) + ":\t" + PageIndex);
+        Console.WriteLine(nameof(PageSize) + ":\t" + PageSize);
+        Console.WriteLine(nameof(PageLength) + ":\t" + PageLength);
+    }
+
+}
+<MContainer Style="width:80%;max-width:1200px">
+    <MBorder Class="elevation-1 mb-4">
+        <MCardTitle @onclick="TTT">
+            博文列表
+        </MCardTitle>
+    </MBorder>
+    <MList ThreeLine="true" Elevation="1" Class="rounded-lg py-2">
+        @foreach (var item in BlogPosts)
+        {
+            var tags = item.Tags ?? [];
+            <MListItem Ripple="true" Class="ttt">
+                <MListItemContent>
+                    <MListItemTitle Class="my-2">
+                        <a href="@ConstantUtil.GetBbsPostUrl(item)">
+                            @item.Title
+                        </a>
+                    </MListItemTitle>
+                    <MListItemSubtitle>
+                        @(item.Description + item.Description + item.Description + item.Description + item.Description)
+                    </MListItemSubtitle>
+                    <MChipGroup Column="true" Max="0">
+                        @foreach (var tag in tags)
+                        {
+                            <MChip Label="true" Small="true" Color="@MDS.Primary.Style()" Outlined="tag!=HlTag"
+                                   OnClick="()=>SearchByTag(tag)">
+                                @tag
+                            </MChip>
+                        }
+                    </MChipGroup>
+                </MListItemContent>
+                <MListItemAvatar Tile="true" Class="my-auto" Size="120">
+                    <MImage Src="@item.Cover"></MImage>
+                </MListItemAvatar>
+            </MListItem>
+        }
+
+        <MPagination Value=PageIndex
+                     ValueChanged=PageIndexChanged
+                     TotalVisible=10
+                     MobileBreakpoint="Breakpoints.Md"
+                     Length="PageLength" />
+    </MList>
+</MContainer>

@@ -2,15 +2,17 @@
 using BlogWebSite.Services.Extensions;
 using BlogWebSite.Shared;
 using BlogWebSite.Shared.Models;
+
 using CodeWF.Tools.Extensions;
-using Microsoft.Extensions.Options;
+
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
 namespace BlogWebSite.Services
 {
+    /// <param name="siteOption"></param>
     [Obsolete("需要替换掉")]
-    public class AppService(SiteOption siteOption) : IAppService
+    public partial class AppService(SiteOption siteOption) : IAppService
     {
         private readonly SiteOption _siteOption = siteOption;
         private List<DocItem>? _docItems;
@@ -33,19 +35,21 @@ namespace BlogWebSite.Services
             Console.WriteLine("seed ok");
         }
 
+        
+
+
+
         public async Task<List<DocItem>?> GetAllDocItemsAsync()
         {
             if (_docItems?.Any() == true)
             {
                 return _docItems;
             }
-
             var filePath = Path.Combine(GetPath(), "site", "doc", "doc.json");
             if (!File.Exists(filePath))
             {
                 return _docItems;
             }
-
             var fileContent = await File.ReadAllTextAsync(filePath);
             fileContent.FromJson(out _docItems, out var msg);
             return _docItems;
@@ -61,7 +65,9 @@ namespace BlogWebSite.Services
                 }
 
                 var contentPath = string.Empty;
-                contentPath = string.IsNullOrWhiteSpace(parentDir) ? Path.Combine(GetPath(), "site", "doc", $"{item.Slug}.md") : Path.Combine(GetPath(), "site", "doc", parentDir, $"{item.Slug}.md");
+                contentPath = string.IsNullOrWhiteSpace(parentDir)
+                    ? Path.Combine(GetPath(), "site", "doc", $"{item.Slug}.md")
+                    : Path.Combine(GetPath(), "site", "doc", parentDir, $"{item.Slug}.md");
 
                 if (File.Exists(contentPath))
                 {
@@ -109,7 +115,7 @@ namespace BlogWebSite.Services
             var filePath = Path.Combine(GetPath(), "site", "category.json");
 
             var s = Directory.GetCurrentDirectory();
-             if (!File.Exists(filePath))
+            if (!File.Exists(filePath))
             {
                 return _categoryItems;
             }
@@ -159,23 +165,67 @@ namespace BlogWebSite.Services
         {
             PageData<BlogPost> ret = new(pageIndex, pageSize, 0, []);
 
-            var cat = _categoryItems?.FirstOrDefault(cat => cat.Slug == categorySlug);
-            if (cat != null)
+            if (string.IsNullOrEmpty(categorySlug))
             {
                 IEnumerable<BlogPost> posts;
                 if (!string.IsNullOrWhiteSpace(key))
                 {
-                    posts = _blogPosts?.Where(p => p.Title?.Contains(key) == true || p.Description?.Contains(key) == true || p.Slug?.Contains(key) == true || p.Author?.Contains(key) == true || p.LastModifyUser?.Contains(key) == true || p.Content?.Contains(key) == true);
+                    posts = _blogPosts?.Where(p =>
+                        p.Title?.Contains(key) == true
+                        || p.Description?.Contains(key) == true
+                        || p.Slug?.Contains(key) == true
+                        || p.Author?.Contains(key) == true
+                        || p.LastModifyUser?.Contains(key) == true
+                        || p.Content?.Contains(key) == true
+                    );
                 }
                 else
                 {
-                    posts = _blogPosts?.Where(post => post.Categories?.Contains(cat.Name) == true);
+                    posts = _blogPosts?.AsEnumerable();
                 }
 
                 var total = posts.Count();
 
-                var postDatas = posts.OrderByDescending(post => post.Lastmod).ThenByDescending(post => post.Date).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+                var postDatas = posts
+                    .OrderByDescending(post => post.Lastmod)
+                    .ThenByDescending(post => post.Date)
+                    .Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
                 ret = new(pageIndex, pageSize, total, postDatas);
+            }
+            else
+            {
+                var cat = _categoryItems?.FirstOrDefault(cat => cat.Slug == categorySlug);
+                if (cat != null)
+                {
+                    IEnumerable<BlogPost> posts;
+                    if (!string.IsNullOrWhiteSpace(key))
+                    {
+                        posts = _blogPosts?.Where(p =>
+                            p.Title?.Contains(key) == true
+                            || p.Description?.Contains(key) == true
+                            || p.Slug?.Contains(key) == true
+                            || p.Author?.Contains(key) == true
+                            || p.LastModifyUser?.Contains(key) == true
+                            || p.Content?.Contains(key) == true
+                        );
+                    }
+                    else
+                    {
+                        posts = _blogPosts?.Where(post => post.Categories?.Contains(cat.Name) == true);
+                    }
+
+                    var total = posts.Count();
+
+                    var postDatas = posts
+                        .OrderByDescending(post => post.Lastmod)
+                        .ThenByDescending(post => post.Date)
+                        .Skip((pageIndex - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+                    ret = new(pageIndex, pageSize, total, postDatas);
+                }
             }
 
             return Task.FromResult(ret);

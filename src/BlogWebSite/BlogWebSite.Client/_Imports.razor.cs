@@ -14,8 +14,8 @@ global using Microsoft.AspNetCore.Components.Web.Virtualization;
 global using Microsoft.JSInterop;
 
 global using static Microsoft.AspNetCore.Components.Web.RenderMode;
-
 global using MDC = VleaStwo.MasaBlazorHelpers.CssHelpers.Colors.MaterialDesignColors;
 global using MDI = VleaStwo.MasaBlazorHelpers.ConstantMDI.MaterialDesignIcons;
 global using MDS = VleaStwo.MasaBlazorHelpers.CssHelpers.Styles.MaterialDesignStyles;
 
+global using static BlogWebSite.Shared.Extensions.ConstantUtil;

@@ -8,6 +8,14 @@
 		<StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
 	</PropertyGroup>
 
+	<!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>-->
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
+
 
 	<ItemGroup>
 		<PackageReference Include="Masa.Blazor" Version="1.7.8" />

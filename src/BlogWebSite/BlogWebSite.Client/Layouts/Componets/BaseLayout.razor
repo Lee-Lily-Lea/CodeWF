@@ -1,7 +1,7 @@
 ﻿@using BlogWebSite.Client.Layouts.Componets;
 
 <MApp>
-    <AppNav App="NavApp" />
+    <AppBar App="NavApp" />
 
     <MMain>
         <MContainer Fluid="true">
@@ -24,6 +24,7 @@
 @code {
     [Parameter]
     public bool NavApp { get; set; } = true;
+
     [Parameter]
     public bool FooterApp { get; set; } = true;
 

@@ -4,7 +4,7 @@ public partial class NavTabs
 {
     public NavTabs()
     {
-        tabs = [new("首页", "/"), new("项目", "/1"), new("博客", "/bbs"), about];
+        tabs = [new("首页", "/"), new("项目", "/1"), new("博客", "/bbs/bytag"), about];
     }
 
     readonly TabModel[] tabs;

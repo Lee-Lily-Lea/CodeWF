@@ -2,7 +2,7 @@
 
 namespace BlogWebSite.Client.Layouts.Componets
 {
-    public partial class AppNav
+    public partial class AppBar
     {
         [Parameter]
         public bool App { get; set; }

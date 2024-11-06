@@ -81,13 +81,12 @@ namespace BlogWebSite
             services.AddScoped(sp => sp.GetService<IOptions<SiteInfo>>()!.Value);
 
             var opt = infoConfig.Get<SiteOption>();
-            services.AddSingleton<SiteOption>(opt);
+            //services.AddSingleton<SiteOption>(opt);
 
             var appService = new AppService(opt);
             await appService.SeedAsync();
-            services.AddSingleton<AppService>(appService);
+            //services.AddSingleton<AppService>(appService);
             services.AddSingleton<IAppService>(appService);
-
         }
 
 
