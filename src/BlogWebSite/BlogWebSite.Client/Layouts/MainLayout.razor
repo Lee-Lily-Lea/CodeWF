@@ -2,8 +2,24 @@
 
 @inherits LayoutComponentBase
 
-<BaseLayout NavApp="true" FooterApp="true">
+<BaseLayout NavBarApp="app" FooterApp="true">
     <ChildContent>
         @Body
     </ChildContent>
 </BaseLayout>
+
+@code{
+    bool app;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        if (NavigationManager.Uri==NavigationManager.BaseUri)
+        {
+            app = false;
+        }
+        else
+        {
+            app = true;
+        }
+    }
+}

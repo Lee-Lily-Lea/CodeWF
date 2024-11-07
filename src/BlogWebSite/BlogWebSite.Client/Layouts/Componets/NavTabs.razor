@@ -17,9 +17,6 @@
                         @foreach (var sub in subs)
                         {
                             <MListItem Href="@sub.Href" PrependIcon="@sub.IconName" Title="@sub.Name" Target="@sub.Target" Exact="true" ActiveClass="@MDS.Primary.Text()" />
-                            @*                       <MTab Href="@sub.Href" Target="@sub.Target" Exact="true" >
-                @sub.Name
-                </MTab> *@
                         }
                     </MList>
                 </ChildContent>

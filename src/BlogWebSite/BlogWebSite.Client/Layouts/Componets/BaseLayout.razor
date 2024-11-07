@@ -1,7 +1,8 @@
 ﻿@using BlogWebSite.Client.Layouts.Componets;
+@inherits Masa.Blazor.Core.MasaComponentBase;
 
 <MApp>
-    <AppBar App="NavApp" />
+    <AppBar App="NavBarApp" />
 
     <MMain>
         <MContainer Fluid="true">
@@ -11,7 +12,7 @@
         </MContainer>
     </MMain>
 
-    <AppFooter App="FooterApp" />
+     <AppFooter App="FooterApp" />
 </MApp>
 
 <div id="blazor-error-ui" data-nosnippet>
@@ -20,52 +21,3 @@
     <span class="dismiss">🗙</span>
 </div>
 
-
-@code {
-    [Parameter]
-    public bool NavApp { get; set; } = true;
-
-    [Parameter]
-    public bool FooterApp { get; set; } = true;
-
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
-
-    string wasm = "not";
-    string server = "not";
-
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-
-        if (IRenderMode.IsWasm())
-        {
-            wasm = "Is";
-            await CheckTheme();
-        }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender) // 只在第一次渲染后调用
-        {
-            if (IRenderMode.IsWasm() is false)
-            {
-                server = "Is";
-                await CheckTheme();
-                await InvokeAsync(StateHasChanged);
-            }
-        }
-
-        await base.OnAfterRenderAsync(firstRender);
-    }
-
-    async Task CheckTheme()
-    {
-        var themeName = (await MasaLS.GetItemAsync("masablazor@theme"));
-
-        MasaBlazor.SetTheme(themeName is "dark");
-
-        // MasaBlazor.OnThemeChange += theme => InvokeAsync(StateHasChanged);
-    }
-}
