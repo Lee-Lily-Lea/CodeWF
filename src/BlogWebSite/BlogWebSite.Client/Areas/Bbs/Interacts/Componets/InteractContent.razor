@@ -1,6 +1,6 @@
 ﻿<MContainer Style="width:80%;max-width:1200px">
     <MBorder Class="elevation-1 mb-4">
-        <MCardTitle >
+        <MCardTitle>
             博文列表
         </MCardTitle>
     </MBorder>
@@ -9,12 +9,12 @@
         {
             var tags = item.Tags ?? [];
             <blazorDiv>
-                <MListItem Ripple="true" Class="hoverItem">
+                <MListItem Class="hoverItem">
                     <MListItemContent>
                         <MListItemTitle Class="my-2">
-                            <a href="@ConstantUtil.GetBbsPostUrl(item)">
+                            <MButton Href="@ConstantUtil.GetBbsPostUrl(item)"  Large="true" Block="true" Color="@MDS.Info.Style()">
                                 @item.Title
-                            </a>
+                            </MButton>
                         </MListItemTitle>
                         <MListItemSubtitle>
                             @(item.Description + item.Description + item.Description + item.Description + item.Description)

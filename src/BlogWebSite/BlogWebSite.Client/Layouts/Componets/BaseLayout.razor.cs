@@ -19,7 +19,7 @@ namespace BlogWebSite.Client.Layouts.Componets
         private void Application_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             var propName = e.PropertyName;
-            double d = 6;
+            StateHasChanged();
         }
 
         [Parameter]

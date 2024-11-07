@@ -1,0 +1,5 @@
+﻿@media screen and (max-width: 800px) {
+    blazorDiv ::deep {
+        display: none !important;
+    }
+}
