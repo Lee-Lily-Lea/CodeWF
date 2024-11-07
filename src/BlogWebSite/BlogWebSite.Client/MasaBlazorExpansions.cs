@@ -7,6 +7,6 @@ public static class MasaBlazorExpansions
         ServiceLifetime masaBlazorServiceLifetime = ServiceLifetime.Scoped
     )
     {
-        return services.AddMasaBlazor(opt => { }, masaBlazorServiceLifetime);
+        return services.AddMasaBlazor(opt => { /*opt.ConfigureTheme(c=>c.CurrentTheme.)*/}, masaBlazorServiceLifetime);
     }
 }

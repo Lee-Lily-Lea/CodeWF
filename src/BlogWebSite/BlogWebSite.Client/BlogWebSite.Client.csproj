@@ -23,7 +23,6 @@
 		<PackageReference Include="VleaStwo.MasaBlazorHelpers.ConstantMDI" Version="7.1.91" />
 		<PackageReference Include="VleaStwo.MasaBlazorHelpers.CssHelpers" Version="0.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.10" PrivateAssets="all" />
-		
 	</ItemGroup>
 
 

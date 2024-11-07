@@ -9,7 +9,9 @@
                     <MTab @attributes=context.Attrs MatchPattern="@tab.Href" Href="javascript:void(0)" Class="pl-8 pr-6">
                         <MIcon Icon="tab.IconName" />
                         @tab.Name
-                        <MIcon Icon="@MDI.chevron_down" Small="true" Class="rotate-Icon" Style="--rotate-angle:180" />
+                        <div class="rotate-Icon" style="--rotate-angle:180">
+                            <MIcon Icon="@MDI.chevron_down" Small="false" />
+                        </div>
                     </MTab>
                 </ActivatorContent>
                 <ChildContent>
