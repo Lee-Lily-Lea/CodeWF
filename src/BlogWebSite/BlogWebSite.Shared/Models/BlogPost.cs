@@ -22,6 +22,7 @@ public class BlogPostBrief
 
 public class BlogPost : BlogPostBrief
 {
+    public const string DefaultAuthor = "沙漠尽头的狼";
     public string? Content { get; set; }
     public string? HtmlContent { get; set; }
 }

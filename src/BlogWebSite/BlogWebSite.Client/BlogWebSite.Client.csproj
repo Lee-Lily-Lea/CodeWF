@@ -16,6 +16,10 @@
 	  <DebugType>none</DebugType>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DebugType>embedded</DebugType>
+	</PropertyGroup>
+
 
 	<ItemGroup>
 		<PackageReference Include="Masa.Blazor" Version="1.7.8" />

@@ -19,3 +19,5 @@ global using MDI = VleaStwo.MasaBlazorHelpers.ConstantMDI.MaterialDesignIcons;
 global using MDS = VleaStwo.MasaBlazorHelpers.CssHelpers.Styles.MaterialDesignStyles;
 
 global using static BlogWebSite.Shared.Extensions.ConstantUtil;
+
+global using static BlogWebSite.Client.Extensions.Masa.MyJsRuntimeExtensions;

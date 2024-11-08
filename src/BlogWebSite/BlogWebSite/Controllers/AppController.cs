@@ -1,7 +1,7 @@
 ﻿using BlogWebSite.Shared;
 using BlogWebSite.Shared.Models;
-
 using Microsoft.AspNetCore.Mvc;
+using YamlDotNet.Core.Tokens;
 
 namespace BlogWebSite.Controllers
 {
@@ -13,6 +13,12 @@ namespace BlogWebSite.Controllers
         public Task<PageData<BlogPost>> GetPostByAny(int pageIndex, int pageSize, string? keyword)
         {
             return appService.GetPostByAny(pageIndex, pageSize, keyword);
+        }
+
+        [HttpGet]
+        public Task<PageData<BlogPost>> GetPostByAuthor(int pageIndex, int pageSize, string? author)
+        {
+            return appService.GetPostByAuthor(pageIndex, pageSize, author);
         }
 
         [HttpGet]

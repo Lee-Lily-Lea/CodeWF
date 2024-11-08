@@ -1,21 +1,19 @@
 ﻿using BlogWebSite.Shared.Models;
-
 using Microsoft.AspNetCore.Components;
 
 namespace BlogWebSite.Client.Areas.Bbs.Interacts
 {
-    public partial class InteractByTag : IInteracts
+    public partial class InteractByAuthor : IInteracts
     {
-        public const string Route = "/bbs/bytag";
-        #region models
-        int pageIndex = 1;
+        public const string Route = "/bbs/byauthor";
 
+        #region models
+        int pageIndex;
 
         public async Task OnPageIndexChanged(int val)
         {
             pageIndex = val;
             await LoadData();
-            await Js.ScrollToTopAsync(null, 100);
         }
 
         readonly int pageSize = 10;
@@ -42,7 +40,7 @@ namespace BlogWebSite.Client.Areas.Bbs.Interacts
         {
             await base.OnInitializedAsync();
 
-            await LoadData();
+            await CheckTagQuery();
         }
 
         protected override async Task OnParametersSetAsync()
@@ -53,22 +51,21 @@ namespace BlogWebSite.Client.Areas.Bbs.Interacts
         }
 
         [SupplyParameterFromQuery]
-        public string? HlTag { get; set; }
-        string? tag = Guid.NewGuid().ToString();
+        public string? Author { get; set; }
+        string? author = Guid.NewGuid().ToString();
 
         async Task CheckTagQuery()
         {
-            if (tag != HlTag)
+            if (author != Author)
             {
-                tag = HlTag;
-                pageIndex = 1;
-                await LoadData();
+                author = Author;
+                await OnPageIndexChanged(1);
             }
         }
 
         public async Task LoadData()
         {
-            var blogPosts = await IAppService.GetPostByTag(pageIndex, pageSize, tag);
+            var blogPosts = await IAppService.GetPostByAuthor(pageIndex, pageSize, author);
 
             total = blogPosts.Total;
             SetPageLenght();
@@ -78,7 +75,7 @@ namespace BlogWebSite.Client.Areas.Bbs.Interacts
         [Obsolete("移动端无限加载的逻辑")]
         public async Task AddData()
         {
-            var blogPosts = await IAppService.GetPostByTag(pageIndex + 1, pageSize, tag);
+            var blogPosts = await IAppService.GetPostByAuthor(pageIndex + 1, pageSize, author);
 
             total = blogPosts.Total;
             blogs.AddRange(blogPosts.Data);

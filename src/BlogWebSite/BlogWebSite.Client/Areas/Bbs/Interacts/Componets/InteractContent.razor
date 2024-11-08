@@ -1,46 +1,84 @@
-﻿<MContainer Style="width:80%;max-width:1200px">
-    <MBorder Class="elevation-1 mb-4">
-        <MCardTitle>
-            博文列表
-        </MCardTitle>
-    </MBorder>
-    <MList ThreeLine="true" Elevation="1" Class="rounded-lg py-2">
-        @foreach (var item in BlogPosts)
-        {
-            var tags = item.Tags ?? [];
-            <blazorDiv>
-                <MListItem Class="hoverItem">
-                    <MListItemContent>
-                        <MListItemTitle Class="my-2">
-                            <MButton Href="@ConstantUtil.GetBbsPostUrl(item)"  Large="true" Block="true" Color="@MDS.Info.Style()">
-                                @item.Title
-                            </MButton>
-                        </MListItemTitle>
-                        <MListItemSubtitle>
-                            @(item.Description + item.Description + item.Description + item.Description + item.Description)
-                        </MListItemSubtitle>
-                        <MChipGroup Column="true" Max="0">
-                            @foreach (var tag in tags)
-                            {
-                                <MChip Label="true" Small="true" Color="@MDS.Primary.Style()" Outlined="tag!=HlTag"
-                                       OnClick="()=>SearchByTag(tag)">
-                                    @tag
-                                </MChip>
-                            }
-                        </MChipGroup>
-                    </MListItemContent>
-                    <MListItemAvatar Tile="true" Class="my-auto" Size="120">
-                        <MImage Src="@item.Cover"></MImage>
+﻿@code {
+    bool tool;
+}
+
+<div id="cats">
+    <div>
+        <button>sss</button>
+        <!--TODO 补充分类导航-->
+    </div>
+</div>
+
+
+<div id="toc" style="width:18%">
+    <div>
+        <a class="item-title" href="@GetTopLink()" title="@Title">@Title</a>
+    </div>
+    @foreach (var item in BlogPosts)
+    {
+        <div>
+            <a class="item-h2" href="@GetLink(item.Slug)" title="@item.Title">@item.Title</a>
+        </div>
+    }
+</div>
+
+
+<MList ThreeLine="true" Elevation="2" Class="rounded-lg py-2 mx-auto" Style="width:60%;max-width:1200px;">
+    <MCardTitle Id="@Title">@Title</MCardTitle>
+    @foreach (var item in BlogPosts)
+    {
+        var tags = item.Tags ?? [];
+        @* var cats = item.Categories ?? []; *@
+        <blazorDiv>
+            <MListItem Class="hoverItem" Id="@item.Slug">
+                <MListItemContent>
+                    <MButton Href="@ConstantUtil.GetBbsPostUrl(item)" Disabled="false" Outlined="true"
+                             Depressed="true" Block="true" Color="@MDS.Primary.Style()"
+                             Class="mb-1">
+                        @item.Title
+                    </MButton>
+
+                    <MListItemSubtitle>
+                        @item.Description
+                    </MListItemSubtitle>
+
+                    <MChipGroup Column="true" Max="0">
+                        @foreach (var tag in tags)
+                        {
+                            <MChip Label="true" Small="true" Color="@MDS.Info.Style()"
+                                   Outlined="tag.Equals(HlTag,StringComparison.OrdinalIgnoreCase) is false"
+                                   OnClick="()=>SearchByTag(tag)">
+                                @tag
+                            </MChip>
+                        }
+                    </MChipGroup>
+
+                    <MLabel Style="align-content:center;">
+                        <span>update:&nbsp; @item.Lastmod &nbsp; | &nbsp;</span>
+                        <span>created:&nbsp; @item.Date &nbsp; | &nbsp;</span>
+                    </MLabel>
+
+                </MListItemContent>
+
+                <div style="text-align:center;display:flex;flex-flow:column">
+                    <MListItemAvatar Tile="true" Class="my-auto" Size="140">
+                        <MImage Src="@item.Cover" />
                     </MListItemAvatar>
-                </MListItem>
-            </blazorDiv>
+                    <MChip Label="true" Small="true" Color="@MDS.Success.Style()"
+                           OnClick="()=>SearchByAuthor(item.Author)" Class="ma-2">
+                        by:&nbsp; @(item.Author ?? BlogPost.DefaultAuthor)
+                    </MChip>
+                </div>
 
-        }
+            </MListItem>
+        </blazorDiv>
 
-        <MPagination Value=PageIndex
-                     ValueChanged=PageIndexChanged
-                     TotalVisible=10
-                     MobileBreakpoint="Breakpoints.Md"
-                     Length="PageLength" />
-    </MList>
-</MContainer>
+    }
+
+    <MPagination Value=PageIndex
+                 ValueChanged=PageIndexChanged
+                 TotalVisible=10
+                 MobileBreakpoint="Breakpoints.Md"
+                 Length="PageLength"
+                 Class="mt-8 mb-2" />
+</MList>

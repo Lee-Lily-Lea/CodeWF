@@ -15,6 +15,9 @@ namespace BlogWebSite.Shared
 
         [HttpGet(AppService + nameof(GetPostByTag))]
         Task<PageData<BlogPost>> GetPostByTag(int pageIndex, int pageSize, string? tag);
+
+        [HttpGet(AppService + nameof(GetPostByAuthor))]
+        Task<PageData<BlogPost>> GetPostByAuthor(int pageIndex, int pageSize, string? author);
     }
 
 
