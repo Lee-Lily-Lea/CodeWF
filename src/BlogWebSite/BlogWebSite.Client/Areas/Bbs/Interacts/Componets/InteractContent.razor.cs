@@ -29,6 +29,9 @@ public partial class InteractContent
     [SupplyParameterFromQuery]
     public string? Author { get; set; }
 
+    [SupplyParameterFromQuery]
+    public string? CatSlug { get; set; }
+
     string GetTagUrl(string? tag)
     {
         var url = GetQuery(InteractByTag.Route, nameof(HlTag), tag);
@@ -39,6 +42,13 @@ public partial class InteractContent
     string GetAuthorUrl(string? author)
     {
         var url = GetQuery(InteractByAuthor.Route, nameof(Author), author);
+
+        return url;
+    }
+
+    string GetCatUrl(string? cat)
+    {
+        var url = GetQuery(InteractByCatSlug.Route, nameof(CatSlug), cat);
 
         return url;
     }
@@ -76,8 +86,15 @@ public partial class InteractContent
         NavigationManager.NavigateTo(url);
     }
 
-
-
+    void SearchByCatSlug(string? catSlug)
+    {
+        if (catSlug == CatSlug)
+        {
+            catSlug = null;
+        }
+        var url = GetCatUrl(catSlug);
+        NavigationManager.NavigateTo(url);
+    }
 
 
 
@@ -101,6 +118,15 @@ public partial class InteractContent
             await Js.InvokeVoidAsync("tocUp", 50, 800);
             await Js.InvokeVoidAsync("watchTOC");
         }
+    }
+
+
+    List<CategoryItem> cats = [];
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var cats = await IAppService.GetAllCategoryItemsAsync();
+        this.cats = cats ?? [];
     }
 
 }

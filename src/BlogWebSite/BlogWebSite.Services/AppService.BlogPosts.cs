@@ -19,7 +19,9 @@ namespace BlogWebSite.Services
                 return source;
             }
 
-            return source.Where(p => p.Tags?.Contains(tag) == true);
+            return source.Where(p =>
+                p.Tags?.Any(x => x.Contains(tag, StringComparison.OrdinalIgnoreCase)) is true
+            );
         }
 
         private IEnumerable<BlogPost> GetPostByAuthorCore(IEnumerable<BlogPost>? source, string? author)
@@ -68,7 +70,7 @@ namespace BlogWebSite.Services
             return posts;
         }
 
-        private IEnumerable<BlogPost> GetPostByCategoryCore(IEnumerable<BlogPost>? source, string? categorySlug)
+        private IEnumerable<BlogPost> GetPostByCatSlugCore(IEnumerable<BlogPost>? source, string? categorySlug)
         {
             if (source is null)
             {
@@ -80,7 +82,9 @@ namespace BlogWebSite.Services
                 return source;
             }
 
-            return source.Where(p => p.Categories?.Contains(categorySlug) == true);
+            return source.Where(
+                p => p.Categories?.Any(x => x.Contains(categorySlug, StringComparison.OrdinalIgnoreCase)) is true
+                );
         }
 
         private List<BlogPost> BlogPostToListCore(IEnumerable<BlogPost> source, int pageIndex, int pageSize)
@@ -128,9 +132,12 @@ namespace BlogWebSite.Services
             return Task.FromResult(new PageData<BlogPost>(pageIndex, pageSize, total, data));
         }
 
-        Task<PageData<BlogPost>> IAppService.GetPostByCategory(int pageIndex, int pageSize, string? categorySlug)
+        Task<PageData<BlogPost>> IAppService.GetPostByCatSlug(int pageIndex, int pageSize, string? categorySlug)
         {
-            var posts = GetPostByCategoryCore(_blogPosts, categorySlug);
+            //var json = _blogPosts.Where(p => p.Categories.Contains("分享")).Select(x => x.Title);
+            //Console.WriteLine(string.Join(',', json));
+
+            var posts = GetPostByCatSlugCore(_blogPosts, categorySlug);
 
             var total = posts.Count();
             var data = BlogPostToListCore(posts, pageIndex, pageSize);

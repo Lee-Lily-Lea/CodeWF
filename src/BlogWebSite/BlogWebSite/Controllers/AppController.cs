@@ -1,7 +1,6 @@
 ﻿using BlogWebSite.Shared;
 using BlogWebSite.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
-using YamlDotNet.Core.Tokens;
 
 namespace BlogWebSite.Controllers
 {
@@ -9,6 +8,12 @@ namespace BlogWebSite.Controllers
     [ApiController]
     public class AppController(IAppService appService) : ControllerBase, IAppService
     {
+        [HttpGet]
+        public Task<List<CategoryItem>> GetAllCategoryItemsAsync()
+        {
+            return appService.GetAllCategoryItemsAsync();
+        }
+
         [HttpGet]
         public Task<PageData<BlogPost>> GetPostByAny(int pageIndex, int pageSize, string? keyword)
         {
@@ -22,9 +27,9 @@ namespace BlogWebSite.Controllers
         }
 
         [HttpGet]
-        public Task<PageData<BlogPost>> GetPostByCategory(int pageIndex, int pageSize, string? categorySlug)
+        public Task<PageData<BlogPost>> GetPostByCatSlug(int pageIndex, int pageSize, string? categorySlug)
         {
-            return appService.GetPostByCategory(pageIndex, pageSize, categorySlug);
+            return appService.GetPostByCatSlug(pageIndex, pageSize, categorySlug);
         }
 
         [HttpGet]

@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Components;
 
 namespace BlogWebSite.Client.Areas.Bbs.Interacts
 {
-    public partial class InteractByAuthor : IInteracts
+    public partial class InteractByCatSlug : IInteracts
     {
-        public const string Route = "/bbs/byauthor";
+        public const string Route = "/bbs/byCatSlug";
 
         #region models
         int pageIndex;
@@ -40,32 +40,32 @@ namespace BlogWebSite.Client.Areas.Bbs.Interacts
         {
             await base.OnInitializedAsync();
 
-            await CheckAuthorQuery();
+            await CheckCatSlugQuery();
         }
 
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
 
-            await CheckAuthorQuery();
+            await CheckCatSlugQuery();
         }
 
         [SupplyParameterFromQuery]
-        public string? Author { get; set; }
-        string? author = Guid.NewGuid().ToString();
+        public string? CatSlug { get; set; }
+        string? catSlug = Guid.NewGuid().ToString();
 
-        async Task CheckAuthorQuery()
+        async Task CheckCatSlugQuery()
         {
-            if (author != Author)
+            if (catSlug != CatSlug)
             {
-                author = Author;
+                catSlug = CatSlug;
                 await OnPageIndexChanged(1);
             }
         }
 
         public async Task LoadData()
         {
-            var blogPosts = await IAppService.GetPostByAuthor(pageIndex, pageSize, author);
+            var blogPosts = await IAppService.GetPostByCatSlug(pageIndex, pageSize, catSlug);
 
             total = blogPosts.Total;
             SetPageLenght();
@@ -75,7 +75,7 @@ namespace BlogWebSite.Client.Areas.Bbs.Interacts
         [Obsolete("移动端无限加载的逻辑")]
         public async Task AddData()
         {
-            var blogPosts = await IAppService.GetPostByAuthor(pageIndex + 1, pageSize, author);
+            var blogPosts = await IAppService.GetPostByCatSlug(pageIndex + 1, pageSize, catSlug);
 
             total = blogPosts.Total;
             blogs.AddRange(blogPosts.Data);

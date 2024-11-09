@@ -4,6 +4,7 @@
     padding-inline: 16px;
     padding-block: 16px 4px;
     margin-inline: 8px;
+    border-radius: 10px;
 }
 
     ::deep > .hoverItem:hover {
@@ -23,9 +24,10 @@
 #cats {
     padding: 1em;
     position: fixed;
-    top: 10%;
-    left: 2%;
-    width: 18%;
+    top: 100px;
+    right: calc(100% - 18%);
+    max-width: 18%;
+    width: auto;
     height: auto;
     max-height: 70vh;
     overflow-y: auto;
@@ -37,4 +39,8 @@
     /* 确保在其他元素之上 */
     transition: all 0.5s ease;
     font-size: 0.8em;
+    justify-content:right;
+/*    &>.m-list{
+
+             }*/
 }

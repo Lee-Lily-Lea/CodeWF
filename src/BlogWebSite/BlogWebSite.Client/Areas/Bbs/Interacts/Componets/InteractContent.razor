@@ -1,12 +1,15 @@
-﻿@code {
-    bool tool;
-}
+﻿@inject IAppService IAppService
 
 <div id="cats">
-    <div>
-        <button>sss</button>
-        <!--TODO 补充分类导航-->
-    </div>
+    <MList Outlined="true" Style="min-width:160px">
+        <MListItemGroup Value="@(CatSlug??string.Empty)" ActiveClass="@MDS.Primary.Style()">
+            <MListItem Value="string.Empty" OnClick="()=>SearchByCatSlug(null)" Title="所有" />
+            @foreach (var cat in cats)
+            {
+                <MListItem Value="cat.Slug" OnClick="()=>SearchByCatSlug(cat.Slug)" AppendIcon="@null" Title="@cat.Name" />
+            }
+        </MListItemGroup>
+    </MList>
 </div>
 
 
@@ -25,6 +28,14 @@
 
 <MList ThreeLine="true" Elevation="2" Class="rounded-lg py-2 mx-auto" Style="width:60%;max-width:1200px;">
     <MCardTitle Id="@Title">@Title</MCardTitle>
+    @if (BlogPosts.Count is 0)
+    {
+        <MChip Color="red lighten-2 my-2 px-4"
+               Dark="true" Label="true" Large="true"
+               Style="margin-left:50%;transform: translateX(-50%);">
+            查询无果
+        </MChip>
+    }
     @foreach (var item in BlogPosts)
     {
         var tags = item.Tags ?? [];
