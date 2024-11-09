@@ -1,7 +1,7 @@
 ﻿@inject IAppService IAppService
 
 <div id="cats">
-    <MList Outlined="true" Style="min-width:160px">
+    <MList Style="min-width:160px;">
         <MListItemGroup Value="@(CatSlug??string.Empty)" ActiveClass="@MDS.Primary.Style()">
             <MListItem Value="string.Empty" OnClick="()=>SearchByCatSlug(null)" Title="所有" />
             @foreach (var cat in cats)
@@ -14,26 +14,60 @@
 
 
 <div id="toc" style="width:18%">
-    <div>
-        <a class="item-title" href="@GetTopLink()" title="@Title">@Title</a>
+    <MList Outlined="true" Style="min-width:160px;">
+        <MListItemGroup @bind-Value=cur ActiveClass="@MDS.Primary.Style()">
+            <MListItem Href="/bbs#博文" Title="顶部" Class="item-title" />
+
+            @foreach (var item in BlogPosts)
+            {
+                <MListItem Value="item.Slug" Href="@("/bbs#" + item.Slug)" AppendIcon="@null" Title="@item.Title" />
+            }
+        </MListItemGroup>
+    </MList>
+    @*     <div>
+    <a class="item-title" href="@GetTopLink()" title="@Title">@Title</a>
     </div>
     @foreach (var item in BlogPosts)
     {
-        <div>
-            <a class="item-h2" href="@GetLink(item.Slug)" title="@item.Title">@item.Title</a>
-        </div>
-    }
+    <div>
+    <a class="item-h2" href="@GetLink(item.Slug)" title="@item.Title">@item.Title</a>
+    </div>
+    } *@
 </div>
 
 
-<MList ThreeLine="true" Elevation="2" Class="rounded-lg py-2 mx-auto" Style="width:60%;max-width:1200px;">
-    <MCardTitle Id="@Title">@Title</MCardTitle>
+<MList ThreeLine="true" Elevation="2" Class="rounded-lg mx-auto" Style="width:60%;">
+    <MCardTitle Id="@Title">
+        <span class="">@Title</span>
+        <MMenu @bind-Value=searchOpen OffsetX="true" ContentClass="elevation-0" CloseOnContentClick="false">
+            <ActivatorContent>
+                <MButton @attributes="context.Attrs"
+                         IconName="@MDI.search_web" Class="mx-2" Color="@MDS.Success.Style()" />
+            </ActivatorContent>
+            <ChildContent>
+                <MTextField @bind-Value=keyword
+                            Solo="true" Autofocus="true" Class="ma-2 "
+                            Prefix="全局 搜索: " Counter="36"
+                            OnEnter="SearchByAny" Color="@MDS.Primary.Style()">
+                    <AppendContent>
+                        <MButton Depressed="true" OnClick="SearchByAny" Color="@MDS.Primary.Text()">搜索</MButton>
+                    </AppendContent>
+                </MTextField>
+            </ChildContent>
+        </MMenu>
+    </MCardTitle>
+    <MCardSubtitle Class="ml-2" Style="height:1em">
+        @SearchTooltip
+    </MCardSubtitle>
+    <MDivider Style="border-top-width: 5px;margin: 8px 16px 16px 16px" />
+
     @if (BlogPosts.Count is 0)
     {
-        <MChip Color="red lighten-2 my-2 px-4"
-               Dark="true" Label="true" Large="true"
-               Style="margin-left:50%;transform: translateX(-50%);">
-            查询无果
+        <MChip Color="red lighten-2"
+               Dark="true" Label="true"
+               Href="@InteractByAny.Route"
+               Style="margin-left:50%;transform: translateX(-50%);padding-inline: 32px;font-size:1em">
+            查询无果 清除筛选
         </MChip>
     }
     @foreach (var item in BlogPosts)
@@ -41,11 +75,13 @@
         var tags = item.Tags ?? [];
         @* var cats = item.Categories ?? []; *@
         <blazorDiv>
-            <MListItem Class="hoverItem" Id="@item.Slug">
+            <MListItem Value="@item.Slug" Class="hoverItem" Id="@item.Slug">
                 <MListItemContent>
-                    <MButton Href="@ConstantUtil.GetBbsPostUrl(item)" Disabled="false" Outlined="true"
-                             Depressed="true" Block="true" Color="@MDS.Primary.Style()"
-                             Class="mb-1">
+                    <MButton Href="@ConstantUtil.GetBbsPostUrl(item)"
+                             Outlined="item.Slug!=cur"
+                             Large="true" Class="mb-1"
+                             Depressed="true" Block="true"
+                             Color="@MDS.Primary.Style()">
                         @item.Title
                     </MButton>
 
@@ -73,6 +109,7 @@
 
                 <div style="text-align:center;display:flex;flex-flow:column">
                     <MListItemAvatar Tile="true" Class="my-auto" Size="140">
+                        @* @onmouseover="()=>cur=item.Slug" *@
                         <MImage Src="@item.Cover" />
                     </MListItemAvatar>
                     <MChip Label="true" Small="true" Color="@MDS.Success.Style()"
@@ -83,7 +120,6 @@
 
             </MListItem>
         </blazorDiv>
-
     }
 
     <MPagination Value=PageIndex

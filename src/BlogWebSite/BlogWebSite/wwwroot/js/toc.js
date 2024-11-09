@@ -16,11 +16,11 @@
     tocUp(offset ?? 200, time);
 };
 
-function watchTOC()
+function watchTOC(offset)
 {
     $(window).on("scroll", function ()
     {
-        $("#toc").toggleClass('toc-show', $(this).scrollTop() > 400);
+        $("#toc").toggleClass('toc-show', $(this).scrollTop() > (offset ?? 400));
     });
 }
 

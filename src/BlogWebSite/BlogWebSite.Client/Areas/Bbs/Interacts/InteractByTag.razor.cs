@@ -55,6 +55,14 @@ namespace BlogWebSite.Client.Areas.Bbs.Interacts
         [SupplyParameterFromQuery]
         public string? HlTag { get; set; }
         string? tag = Guid.NewGuid().ToString();
+        string GetSearchTooltip()
+        {
+            if (string.IsNullOrEmpty(HlTag) is false)
+            {
+                return $"标签 '{HlTag}' 的搜索结果";
+            }
+            return string.Empty;
+        }
 
         async Task CheckTagQuery()
         {

@@ -6,7 +6,7 @@
             var subs = tab.SecTabs;
             <MMenu OffsetY="true">
                 <ActivatorContent>
-                    <MTab @attributes=context.Attrs MatchPattern="@tab.Href" Href="javascript:void(0)" Class="pl-8 pr-6">
+                    <MTab @attributes=context.Attrs MatchPattern="@tab.MatchPattern" Href="javascript:void(0)" Class="pl-8 pr-6">
                         <MIcon Icon="tab.IconName" />
                         @tab.Name
                         <div class="rotate-Icon" style="--rotate-angle:180">
@@ -18,10 +18,9 @@
                     <MList Routable="true">
                         @foreach (var sub in subs)
                         {
-                            <MListItem Href="@sub.Href" PrependIcon="@sub.IconName" Title="@sub.Name" Target="@sub.Target" Exact="true" ActiveClass="@MDS.Primary.Text()" />
-                            @*                       <MTab Href="@sub.Href" Target="@sub.Target" Exact="true" >
-                @sub.Name
-                </MTab> *@
+                            <MListItem ActiveClass="@MDS.Primary.Text()"
+                                       Href="@sub.Href" Target="@sub.Target" MatchPattern="@sub.MatchPattern"
+                                       PrependIcon="@sub.IconName" Title="@sub.Name" />
                         }
                     </MList>
                 </ChildContent>
@@ -29,7 +28,8 @@
         }
         else
         {
-            <MTab Href="@tab.Href" Target="@tab.Target" Class="px-8">
+            <MTab Class="px-8"
+                  Href="@tab.Href" Target="@tab.Target" MatchPattern="@tab.MatchPattern">
                 <MIcon Icon="tab.IconName" />
                 @tab.Name
             </MTab>

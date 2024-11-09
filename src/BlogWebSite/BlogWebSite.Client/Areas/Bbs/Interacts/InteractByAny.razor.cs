@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Components;
 
 namespace BlogWebSite.Client.Areas.Bbs.Interacts
 {
-    public partial class InteractByCatSlug : IInteracts
+    public partial class InteractByAny : IInteracts
     {
-        public const string Route = "/bbs/byCatSlug";
+        public const string Route = "/bbs";
 
         #region models
         int pageIndex;
@@ -40,39 +40,40 @@ namespace BlogWebSite.Client.Areas.Bbs.Interacts
         {
             await base.OnInitializedAsync();
 
-            await CheckCatSlugQuery();
+            await CheckKeywordQuery();
         }
 
         protected override async Task OnParametersSetAsync()
         {
             await base.OnParametersSetAsync();
 
-            await CheckCatSlugQuery();
+            await CheckKeywordQuery();
         }
 
         [SupplyParameterFromQuery]
-        public string? CatSlug { get; set; }
-        string? catSlug = Guid.NewGuid().ToString();
+        public string? Keyword { get; set; }
+        string? keyword = Guid.NewGuid().ToString();
         string GetSearchTooltip()
         {
-            if (string.IsNullOrEmpty(CatSlug) is false)
+            if (string.IsNullOrEmpty(Keyword) is false)
             {
-                return $"分类 '{CatSlug}' 的搜索结果";
+                return $"关键词 '{Keyword}' 的搜索结果";
             }
             return string.Empty;
         }
-        async Task CheckCatSlugQuery()
+
+        async Task CheckKeywordQuery()
         {
-            if (catSlug != CatSlug)
+            if (keyword != Keyword)
             {
-                catSlug = CatSlug;
+                keyword = Keyword;
                 await OnPageIndexChanged(1);
             }
         }
 
         public async Task LoadData()
         {
-            var blogPosts = await IAppService.GetPostByCatSlug(pageIndex, pageSize, catSlug);
+            var blogPosts = await IAppService.GetPostByAny(pageIndex, pageSize, keyword);
 
             total = blogPosts.Total;
             SetPageLenght();
@@ -82,7 +83,7 @@ namespace BlogWebSite.Client.Areas.Bbs.Interacts
         [Obsolete("移动端无限加载的逻辑")]
         public async Task AddData()
         {
-            var blogPosts = await IAppService.GetPostByCatSlug(pageIndex + 1, pageSize, catSlug);
+            var blogPosts = await IAppService.GetPostByAny(pageIndex + 1, pageSize, keyword);
 
             total = blogPosts.Total;
             blogs.AddRange(blogPosts.Data);

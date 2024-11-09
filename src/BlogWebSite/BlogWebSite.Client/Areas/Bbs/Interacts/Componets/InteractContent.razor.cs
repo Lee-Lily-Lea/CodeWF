@@ -32,6 +32,9 @@ public partial class InteractContent
     [SupplyParameterFromQuery]
     public string? CatSlug { get; set; }
 
+    [SupplyParameterFromQuery]
+    public string? Keyword { get; set; }
+    
     string GetTagUrl(string? tag)
     {
         var url = GetQuery(InteractByTag.Route, nameof(HlTag), tag);
@@ -46,9 +49,15 @@ public partial class InteractContent
         return url;
     }
 
-    string GetCatUrl(string? cat)
+    string GetCatSlugUrl(string? cat)
     {
         var url = GetQuery(InteractByCatSlug.Route, nameof(CatSlug), cat);
+
+        return url;
+    }
+    string GetKeywordUrl(string? keyword)
+    {
+        var url = GetQuery(InteractByAny.Route, nameof(Keyword), keyword);
 
         return url;
     }
@@ -92,17 +101,29 @@ public partial class InteractContent
         {
             catSlug = null;
         }
-        var url = GetCatUrl(catSlug);
+        var url = GetCatSlugUrl(catSlug);
         NavigationManager.NavigateTo(url);
     }
 
-
-
+    [Parameter]
+    public string SearchTooltip { get; set; }
+    bool searchOpen;
+    void SearchByAny()
+    {
+        //if (keyword == Keyword)
+        //{
+        //    keyword = null;
+        //}
+        searchOpen = false;
+        var url = GetKeywordUrl(keyword);
+        NavigationManager.NavigateTo(url);
+    }
 
 
     string GetTopLink() => GetLink(Title);
     string GetLink(string id) => NavigationManager.Uri.Split('#')[0] + '#' + id;
 
+    string? keyword;
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
@@ -115,8 +136,10 @@ public partial class InteractContent
                 Title = x.Title,
             });
 
-            await Js.InvokeVoidAsync("tocUp", 50, 800);
-            await Js.InvokeVoidAsync("watchTOC");
+            await Js.InvokeVoidAsync("tocUp", 100, 800);
+            await Js.InvokeVoidAsync("watchTOC", 100);
+
+            keyword = Keyword;
         }
     }
 
@@ -129,4 +152,6 @@ public partial class InteractContent
         this.cats = cats ?? [];
     }
 
+
+    StringNumber cur;
 }

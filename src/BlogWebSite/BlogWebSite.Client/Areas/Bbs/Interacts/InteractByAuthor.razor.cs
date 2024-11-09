@@ -53,6 +53,14 @@ namespace BlogWebSite.Client.Areas.Bbs.Interacts
         [SupplyParameterFromQuery]
         public string? Author { get; set; }
         string? author = Guid.NewGuid().ToString();
+        string GetSearchTooltip()
+        {
+            if (string.IsNullOrEmpty(Author) is false)
+            {
+                return $"作者 '{Author}' 的搜索结果";
+            }
+            return string.Empty;
+        }
 
         async Task CheckAuthorQuery()
         {
