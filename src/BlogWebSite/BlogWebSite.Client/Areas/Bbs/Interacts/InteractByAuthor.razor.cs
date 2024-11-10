@@ -18,7 +18,7 @@ namespace BlogWebSite.Client.Areas.Bbs.Interacts
 
         readonly int pageSize = 10;
 
-        int total;
+        int total = -1;
 
         List<BlogPost> blogs = [];
 

@@ -134,15 +134,18 @@ namespace BlogWebSite.Services
 
         Task<PageData<BlogPost>> IAppService.GetPostByCatSlug(int pageIndex, int pageSize, string? categorySlug)
         {
-            //var json = _blogPosts.Where(p => p.Categories.Contains("分享")).Select(x => x.Title);
-            //Console.WriteLine(string.Join(',', json));
-
             var posts = GetPostByCatSlugCore(_blogPosts, categorySlug);
 
             var total = posts.Count();
             var data = BlogPostToListCore(posts, pageIndex, pageSize);
 
             return Task.FromResult(new PageData<BlogPost>(pageIndex, pageSize, total, data));
+        }
+
+
+        Task<BlogPost?> IAppService.GetPostBySlug(string slug)
+        {
+            return GetPostBySlug(slug);
         }
     }
 }

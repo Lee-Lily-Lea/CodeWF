@@ -9,9 +9,9 @@ namespace BlogWebSite.Controllers
     public class AppController(IAppService appService) : ControllerBase, IAppService
     {
         [HttpGet]
-        public Task<List<CategoryItem>> GetAllCategoryItemsAsync()
+        public Task<List<CategoryItem>> GetAllCategoryItems()
         {
-            return appService.GetAllCategoryItemsAsync();
+            return appService.GetAllCategoryItems();
         }
 
         [HttpGet]
@@ -30,6 +30,12 @@ namespace BlogWebSite.Controllers
         public Task<PageData<BlogPost>> GetPostByCatSlug(int pageIndex, int pageSize, string? categorySlug)
         {
             return appService.GetPostByCatSlug(pageIndex, pageSize, categorySlug);
+        }
+
+        [HttpGet]
+        public Task<BlogPost?> GetPostBySlug(string slug)
+        {
+            return appService.GetPostBySlug(slug);
         }
 
         [HttpGet]

@@ -4,7 +4,9 @@ using static BlogWebSite.Shared.ApiRoutes;
 
 namespace BlogWebSite.Shared
 {
+#if DEBUG
     [LoggingFilter]
+#endif
     public interface IAppService
     {
         [HttpGet(AppService + nameof(GetPostByAny))]
@@ -19,9 +21,13 @@ namespace BlogWebSite.Shared
         [HttpGet(AppService + nameof(GetPostByAuthor))]
         Task<PageData<BlogPost>> GetPostByAuthor(int pageIndex, int pageSize, string? author);
 
+        [HttpGet(AppService + nameof(GetPostBySlug))]
+        Task<BlogPost?> GetPostBySlug(string slug);
 
-        [HttpGet(AppService + nameof(GetAllCategoryItemsAsync))]
-        Task<List<CategoryItem>> GetAllCategoryItemsAsync();
+
+
+        [HttpGet(AppService + nameof(GetAllCategoryItems))]
+        Task<List<CategoryItem>> GetAllCategoryItems();
     }
 
 

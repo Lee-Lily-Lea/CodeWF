@@ -10,4 +10,8 @@
 		<PackageReference Include="WebApiClientCore" Version="2.1.4" />
 		<PackageReference Include="WebApiClientCore.Extensions.NewtonsoftJson" Version="2.1.4" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Extensions\" />
+	</ItemGroup>
 </Project>

@@ -1,8 +1,8 @@
-﻿window.getTOC = function getTOC(id)
+﻿window.getTOC = function getTOC(id, offsetTop, offset, time)
 {
     let hlevel = "h1, h2, h3, h4";
-    var titles = $("#" + id)
-        .find(hlevel)
+    const md = $("#" + id);
+    var titles = md.find(hlevel)
         .map(function ()
         {
             return { type: this.tagName.toLowerCase(), id: $(this).prop("id"), title: $(this).text() };
@@ -11,7 +11,7 @@
 
     setTOC(titles);
 
-    watchTOC();
+    watchTOC(offsetTop);
 
     tocUp(offset ?? 200, time);
 };
@@ -41,7 +41,7 @@ function tocUp(val, time)
     });
 }
 
-function setTOC(titles, offset, time)
+function setTOC(titles)
 {
     const currentUrl = window.location.href.split("#")[0];
     titles.forEach(function (item)

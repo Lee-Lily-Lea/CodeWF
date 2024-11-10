@@ -15,7 +15,7 @@ namespace BlogWebSite
 {
     public class Program
     {
-        public const bool UseWasm = false;
+        public const bool UseWasm = true;
 
         public static async Task Main(string[] args)
         {

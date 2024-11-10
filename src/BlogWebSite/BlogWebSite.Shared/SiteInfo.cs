@@ -36,6 +36,11 @@
         /// 微信二维码
         /// </summary>
         public string? WeChatImg { get; set; }
+
+        /// <summary>
+        /// github仓库
+        /// </summary>
+        public string? RemoteAssetsRepository { get; set; }
     }
 }
 

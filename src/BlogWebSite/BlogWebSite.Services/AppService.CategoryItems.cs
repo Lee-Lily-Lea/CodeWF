@@ -31,7 +31,7 @@ namespace BlogWebSite.Services
 
 
 
-        Task<List<CategoryItem>> IAppService.GetAllCategoryItemsAsync()
+        Task<List<CategoryItem>> IAppService.GetAllCategoryItems()
         {
             var cats = GetAllCategoryItemsCore(_categoryItems, null);
 

@@ -34,9 +34,4 @@
 	  <ProjectReference Include="..\BlogWebSite.Shared\BlogWebSite.Shared.csproj" />
 	</ItemGroup>
 
-
-	<ItemGroup>
-	  <Folder Include="Areas\Bbs\PostPages\" />
-	</ItemGroup>
-
 </Project>

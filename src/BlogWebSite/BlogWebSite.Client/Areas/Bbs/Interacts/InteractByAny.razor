@@ -1,7 +1,5 @@
 ﻿@attribute [Route(Route)]
 
-@inject IAppService IAppService
-
 @using BlogWebSite.Client.Areas.Bbs.Interacts.Componets;
 
 <PageTitle>@InteractContent.Title - @SiteInfo.AppTitle</PageTitle>
@@ -11,5 +9,6 @@
                  PageIndex="pageIndex"
                  PageSize="pageSize"
                  PageLength="pageLength"
+                 NoContent="total is 0"
                  SearchTooltip="@GetSearchTooltip()"
                  PageIndexChanged="OnPageIndexChanged" />

@@ -23,6 +23,10 @@ public partial class InteractContent
     [Parameter]
     public List<BlogPost> BlogPosts { get; set; } = [];
 
+
+    [Parameter]
+    public bool NoContent { get; set; }
+
     [SupplyParameterFromQuery]
     public string? HlTag { get; set; }
 
@@ -148,10 +152,15 @@ public partial class InteractContent
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var cats = await IAppService.GetAllCategoryItemsAsync();
+        var cats = await IAppService.GetAllCategoryItems();
         this.cats = cats ?? [];
     }
 
+    StringNumber curItem;
 
-    StringNumber cur;
+
+    static string GetBbsPostUrl(BlogPost post)
+    {
+        return PostPages.Index.GetUrl(post.Date?.Year ?? 0, post.Date?.Month ?? 0, post.Slug ?? string.Empty);
+    }
 }
