@@ -1,0 +1,6 @@
+﻿.rotate-Icon {
+    transition: all 0.3s cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+[aria-expanded] .rotate-Icon {
+    transform: rotate(calc(var(--rotate-angle) * 1deg));
+}

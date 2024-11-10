@@ -1,0 +1,47 @@
+﻿@attribute [Route(Route)]
+
+<PageTitle>@model?.Title - @SiteInfo.AppTitle</PageTitle>
+
+
+<div id="toc" />
+
+<MToolbar Class="mx-auto" Style="margin-bottom:-8px;width:calc(60% + 16px)" Elevation="2">
+    <MToolbarTitle>
+        联系请关注微信公众号:
+        <a class="wximg" style="--img-wx:url('@SiteInfo.WeChatImg')" target="_blank" href="@SiteInfo.WeChatImg">Dotnet9</a>
+    </MToolbarTitle>
+    <MSpacer />
+    <span class="like">@(model?.Lastmod?.ToString("yyyy-MM-dd HH:mm:ss") ?? model?.Date?.ToString("yyyy-MM-dd HH:mm:ss")) </span>
+    <span class="mx-2">|</span>
+    <span class="author">@(string.IsNullOrWhiteSpace(model?.Author) ? SiteInfo.Owner : model!.Author)</span>
+    <span class="mx-2">|</span>
+    <a href="@GetPostGithubPath(SiteInfo.RemoteAssetsRepository, model)" target="_blank">我要编辑、留言</a>
+</MToolbar>
+
+<div id="mdbody">
+    @((MarkupString)model?.HtmlContent)
+
+    <MButton Href="@GetPostGithubPath(SiteInfo.RemoteAssetsRepository, model)" Target="_blank"
+             Text="true" Color="@MDS.Primary.Style()"
+             Large="true" Block="true">
+        在Github上编辑此文或留言
+    </MButton>
+
+    <button onclick="window.history.back();" class="px-4 py-2 mx-auto elevation-1" style="display:block;border-radius:10px;">
+        返回
+    </button>
+</div>
+
+<div id="mdfooter">
+</div>
+
+
+
+<script>
+    $(getTOC('mdbody', 200, 100))
+</script>
+
+@code {
+    public static string GetPostGithubPath(string? githubRepository, BlogPost? post) =>
+        $"{githubRepository}/blob/main/{post?.Date?.Year:D4}/{post?.Date?.Month:D2}/{post?.Slug}.md";
+}

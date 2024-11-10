@@ -1,0 +1,27 @@
+﻿@charset "utf-8";
+/*@import url("../mdcss/preview_theme/github.css");*/
+/*@import url("../mdcss/prism_theme/vue.css");*/
+
+#mdbody {
+  & pre {
+    padding: 1em;
+    background-color: var(--m-theme-light-surface-container);
+
+    & code {
+      color: #444;
+      font-family: ui-monospace;
+      background-color: transparent;
+      font-weight: bold;
+    }
+  }
+}
+
+.theme--dark #mdbody {
+  & pre {
+    background-color: var(--m-theme-dark-surface-container);
+
+    & code {
+      color: whitesmoke;
+    }
+  }
+}

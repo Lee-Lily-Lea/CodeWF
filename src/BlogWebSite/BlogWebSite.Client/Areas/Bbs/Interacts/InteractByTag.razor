@@ -1,0 +1,14 @@
+﻿@attribute [Route(Route)]
+
+@using BlogWebSite.Client.Areas.Bbs.Interacts.Componets;
+
+<PageTitle>@InteractContent.Title - @SiteInfo.AppTitle</PageTitle>
+
+
+<InteractContent BlogPosts="blogs"
+                 PageIndex="pageIndex"
+                 PageSize="pageSize"
+                 PageLength="pageLength"
+                 NoContent="total is 0"
+                 SearchTooltip="@GetSearchTooltip()"
+                 PageIndexChanged="OnPageIndexChanged" />

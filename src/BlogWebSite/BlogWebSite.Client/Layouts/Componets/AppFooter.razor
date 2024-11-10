@@ -1,0 +1,50 @@
+﻿<MFooter Padless="true" App="App" Rounded="@("lg")" Class="text-center">
+    <blazorDiv>
+        @*这部分内容在800px下隐藏*@
+        <MCardText>
+            @foreach (var icon in _icons)
+            {
+                <MButton Class="mx-4 " IconName="@icon" />
+            }
+        </MCardText>
+
+        <MCardText Class="d-none d-md-flex text-start">
+            @_description
+        </MCardText>
+
+        <MCardText Class="text-center d-flex d-md-none" Style="width:100%">
+            小断点不显示描述
+        </MCardText>
+
+        <MDivider/>
+    </blazorDiv>
+
+    <MCardText>
+        @DateTime.Now.Year - <strong>MASA Blazor</strong>
+    </MCardText>
+</MFooter>
+
+
+@code {
+    private string[] _icons = new string[4] { "mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram" };
+    private const string _description = "Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. " +
+    "Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. " +
+    "Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. " +
+    "Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. " +
+    "Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        // MasaBlazor.OnThemeChange += (theme) =>
+        // {
+        //     dark = !theme.Dark;
+        //     InvokeAsync(StateHasChanged);
+        // };
+    }
+    bool dark;
+
+
+    [Parameter]
+    public bool App { get; set; }
+}

@@ -1,0 +1,30 @@
+﻿@charset "utf-8";
+
+#mdbody {
+  width: 60%;
+  margin-inline: auto;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  padding: 16px;
+}
+
+.wximg ::deep {
+  margin-left:16px;
+  &::after {
+    content: " ";
+    position: absolute;
+    top: 20px;
+    left: 260px;
+    width: 400px;
+    height: 400px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-image: var(--img-wx); /* 设置图片的URL */
+    background-size: cover; /* 使图片覆盖整个 div */
+    background-position: center; /* 让图片居中 */
+    opacity: 0; /* 初始时隐藏图片 */
+    pointer-events: none;
+    transition: opacity 0.3s ease; /* 添加渐变效果 */
+  }
+  &:hover::after {
+    opacity: 1; /* 鼠标悬停时显示图片 */
+  }
+}

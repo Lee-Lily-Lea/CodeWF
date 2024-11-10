@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Components.Web
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
 @using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.Extensions.Options
 @using Microsoft.JSInterop
 @using BlogWebSite.Client
 @using Masa.Blazor
@@ -14,6 +15,8 @@
 @using VleaStwo.MasaBlazorHelpers.CssHelpers.Colors;
 @using VleaStwo.MasaBlazorHelpers.CssHelpers.Styles;
 
+@using BlogWebSite.Shared;
+@using BlogWebSite.Shared.Models;
 @using BlogWebSite.Client.Shared.Componets;
 @using BlogWebSite.Client.Shared.Componets.Settings;
 
@@ -24,6 +27,10 @@
 @inject MasaBlazor MasaBlazor
 @inject NavigationManager NavigationManager
 @inject LocalStorage MasaLS
+@inject SiteInfo SiteInfo
 
+@inject IJSRuntime Js
 @inject IPopupService Popup
 @inject BlogWebSite.Shared.RenderModes.IRenderMode IRenderMode
+
+@inject IAppService IAppService

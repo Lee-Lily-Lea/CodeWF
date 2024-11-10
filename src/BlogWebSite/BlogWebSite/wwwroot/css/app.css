@@ -2,6 +2,8 @@
 @import url(../css/scrollbar.css);
 @import url(../css/my.css);
 @import url(../css/error.css);
+@import url(../css/toc.css);
+@import url(../css/mdcss/md.css);
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

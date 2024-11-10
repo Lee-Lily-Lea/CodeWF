@@ -1,0 +1,10 @@
+﻿@using BlogWebSite.Client.Layouts.Componets;
+@attribute [Obsolete("不是单例的布局有问题",true)]
+
+@inherits LayoutComponentBase
+
+<BaseLayout NavBarApp="true" FooterApp="true">
+    <ChildContent>
+        @Body
+    </ChildContent>
+</BaseLayout>

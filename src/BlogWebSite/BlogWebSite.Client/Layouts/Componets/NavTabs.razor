@@ -1,0 +1,49 @@
+﻿<MTabs Class="@Class" Routable="true" ShowArrows="@Vertical" Vertical="@Vertical" BackgroundColor="transparent" ActiveClass="font-weight-bold">
+    @foreach (var tab in tabs)
+    {
+        @if (tab.SecTabs?.Length > 0 is true)
+        {
+            var subs = tab.SecTabs;
+            <MMenu OffsetY="true">
+                <ActivatorContent>
+                    <MTab @attributes=context.Attrs MatchPattern="@tab.MatchPattern" Href="javascript:void(0)" Class="pl-8 pr-6">
+                        <MIcon Icon="tab.IconName" />
+                        @tab.Name
+                        <div class="rotate-Icon" style="--rotate-angle:180">
+                            <MIcon Icon="@MDI.chevron_down" Small="false" />
+                        </div>
+                    </MTab>
+                </ActivatorContent>
+                <ChildContent>
+                    <MList Routable="true">
+                        @foreach (var sub in subs)
+                        {
+                            <MListItem ActiveClass="@MDS.Primary.Text()"
+                                       Href="@sub.Href" Target="@sub.Target" MatchPattern="@sub.MatchPattern"
+                                       PrependIcon="@sub.IconName" Title="@sub.Name" />
+                        }
+                    </MList>
+                </ChildContent>
+            </MMenu>
+        }
+        else
+        {
+            <MTab Class="px-8"
+                  Href="@tab.Href" Target="@tab.Target" MatchPattern="@tab.MatchPattern">
+                <MIcon Icon="tab.IconName" />
+                @tab.Name
+            </MTab>
+        }
+    }
+</MTabs>
+
+
+
+
+@code {
+    [Parameter]
+    public bool Vertical { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+}

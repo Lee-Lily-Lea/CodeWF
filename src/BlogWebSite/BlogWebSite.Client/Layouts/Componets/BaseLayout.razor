@@ -1,0 +1,22 @@
+﻿@using BlogWebSite.Client.Layouts.Componets;
+@inherits Masa.Blazor.Core.MasaComponentBase;
+
+<MApp>
+    <AppBar App="NavBarApp" />
+
+    <MMain>
+        <MContainer Fluid="true">
+            <MErrorHandler>
+                @ChildContent
+            </MErrorHandler>
+        </MContainer>
+    </MMain>
+
+    <AppFooter App="FooterApp" />
+</MApp>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
